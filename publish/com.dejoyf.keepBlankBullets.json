@@ -25,5 +25,6 @@
 	"screenshots": [],
 	"icons": {},
 	"promo_tile": {},
-	"_publish_hash": "sha256:2b239126aa77083ba43c7e8a5f0e1e4ed860c70e1f4f821e0782e8d26812ffbb"
+	"_publish_hash": "sha256:2b239126aa77083ba43c7e8a5f0e1e4ed860c70e1f4f821e0782e8d26812ffbb",
+	"_publish_commit": "main:2bcfbd854e8da22491c8ccb3f468f28048ceb720"
 }
