@@ -1,0 +1,25 @@
+{
+  "name": "joplin-plugin-keep-blank-bullets",
+  "version": "1.2.0",
+  "description": "Rich Text editor, desktop and mobile: an empty bullet, numbered item or checkbox stays in the note until you type in it, instead of being dropped when the note saves.",
+  "scripts": {
+    "dist": "bash build.sh",
+    "test": "node tests/mobile-rig.mjs"
+  },
+  "license": "MIT",
+  "keywords": [
+    "joplin-plugin"
+  ],
+  "files": [
+    "publish"
+  ],
+  "author": "Frank DeJoy",
+  "homepage": "https://github.com/dejoyf-jpg/joplin-keep-blank-bullets",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dejoyf-jpg/joplin-keep-blank-bullets.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dejoyf-jpg/joplin-keep-blank-bullets/issues"
+  }
+}
