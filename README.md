@@ -1,7 +1,9 @@
 # Keep Blank Bullets (Joplin plugin)
 
 In Joplin's Rich Text editor, an empty bullet, numbered item or checkbox stays in the
-note until you type in it. Works on desktop and on Joplin mobile.
+note until you type in it. Works on desktop (Windows, macOS, Linux) and on Joplin for
+Android. The mobile side was developed and tested on Android only. It is untested on
+iPhone and iPad.
 
 ## The problem it fixes
 
@@ -26,7 +28,7 @@ the next time you open the note.
 
 ## Install
 
-In Joplin open **Options > Plugins** (desktop) or **Configuration > Plugins** (mobile),
+In Joplin open **Options > Plugins** (desktop) or **Configuration > Plugins** (Android),
 search for **Keep Blank Bullets**, install, and restart Joplin.
 
 To install by hand, download `publish/com.dejoyf.keepBlankBullets.jpl` and use
@@ -40,6 +42,9 @@ remove it.
 
 ## Limits
 
+- Mobile support was built and tested on Android only (Joplin Android 3.7.11). I do not
+  have an Apple device, so iPhone and iPad are untested. If you run it there, please
+  open an issue with what you see.
 - The plugin makes the redraw harmless for empty list items. It does not stop Joplin
   from redrawing the editor.
 - On mobile, a blank bullet in a note opened before the plugin finished loading can
@@ -55,7 +60,7 @@ Android 3.7.11:
 - `flow.mjs`: the typing sequence. Enter, a forced redraw, typing into the kept item,
   leaving the list, undo.
 - `mobile-rig.mjs`: the mobile save and load paths against Joplin's own Markdown
-  converter, 14 cases.
+  converter, 14 cases. The on-device check was done by hand on an Android phone.
 
 The desktop tests drive a Joplin started with its own empty profile. Never point them
 at a Joplin that holds real notes.
