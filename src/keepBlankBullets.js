@@ -71,9 +71,92 @@
 		ed.on('SetContent', function () {
 			emptyHeldItems(ed);
 		});
+		skipNeedlessRedraws(ed);
 		// The note on screen was drawn before this script loaded.
 		emptyHeldItems(ed);
 		return true;
+	}
+
+	// ----------------------------------------------- desktop: needless redraws ---
+	// Joplin 3.7 redraws the editor from the saved Markdown after every typing pause
+	// when a note with an attachment is open in two windows (its attachment cache is
+	// compared by object identity). The redraw replaces the whole document with one
+	// that reads the same, which can move the cursor. A redraw whose incoming content
+	// matches what is already on screen is skipped. Anything that differs, in text,
+	// structure, links, images, checkbox state or styles, goes through untouched.
+
+	function signature(root) {
+		var styles = [];
+		function walk(n, out) {
+			if (n.nodeType === 3) {
+				var t = n.data.replace(/[\u200b\ufeff]/g, '').replace(/[\s\u00a0]+/g, ' ').trim();
+				if (t && t !== HOLDER_TEXT) out.push('T:' + t);
+				return;
+			}
+			if (n.nodeType !== 1) return;
+			var tag = n.nodeName;
+			if (tag === 'STYLE') {
+				styles.push(n.textContent.replace(/\s+/g, ' ').trim());
+				return;
+			}
+			if (tag === 'SCRIPT' || tag === 'LINK') return;
+			var bogus = n.getAttribute('data-mce-bogus');
+			if (bogus === 'all') return;
+			if (tag === 'BR') {
+				if (!bogus) out.push('BR');
+				return;
+			}
+			var mine = [];
+			for (var c = n.firstChild; c; c = c.nextSibling) walk(c, mine);
+			while (mine.length && mine[mine.length - 1] === 'BR') mine.pop();
+			var a = '';
+			if (tag === 'IMG') {
+				a = (n.getAttribute('data-mce-src') || n.getAttribute('src') || '').replace(/^(blob|data):.*/, 'INLINE') +
+					'|' + (n.getAttribute('alt') || '') + '|' + (n.getAttribute('width') || '') + '|' + (n.getAttribute('height') || '');
+			} else if (tag === 'A') {
+				a = n.getAttribute('data-mce-href') || n.getAttribute('href') || '';
+			} else if (tag === 'INPUT') {
+				a = n.checked ? '1' : '0';
+			} else if (tag === 'LI' || tag === 'UL') {
+				a = (n.className || '').split(/\s+/).filter(function (x) { return x && x.indexOf('mce-') !== 0; }).sort().join('.');
+			}
+			var isVoid = tag === 'IMG' || tag === 'HR' || tag === 'INPUT';
+			// An empty block carries nothing to compare. The saved text may or may not hold it.
+			if (!mine.length && !isVoid && /^(LI|P|UL|OL|DIV|SPAN)$/.test(tag)) return;
+			if (bogus) {
+				for (var i = 0; i < mine.length; i++) out.push(mine[i]);
+				return;
+			}
+			out.push('<' + tag + (a ? ' ' + a : '') + '>');
+			for (var j = 0; j < mine.length; j++) out.push(mine[j]);
+			out.push('</' + tag + '>');
+		}
+		var o = [];
+		for (var c = root.firstChild; c; c = c.nextSibling) walk(c, o);
+		return o.join('\n') + '\n#styles\n' + styles.join('\n');
+	}
+
+	function skipNeedlessRedraws(ed) {
+		var original = ed.setContent;
+		ed.__keepBlankBulletsRedraws = { skipped: 0, passed: 0 };
+		ed.setContent = function (content) {
+			try {
+				var body = ed.getBody();
+				if (typeof content === 'string' && content && body && body.firstChild) {
+					var incoming = ed.getDoc().implementation.createHTMLDocument('');
+					var fragment = ed.parser.parse(content, { isRootContent: true, insert: true, format: 'html', set: true });
+					incoming.body.innerHTML = ed.editorManager.html.Serializer({ validate: false }, ed.schema).serialize(fragment);
+					if (signature(body) === signature(incoming.body)) {
+						ed.__keepBlankBulletsRedraws.skipped++;
+						return content;
+					}
+				}
+			} catch (e) {
+				/* any doubt: let Joplin redraw */
+			}
+			ed.__keepBlankBulletsRedraws.passed++;
+			return original.apply(ed, arguments);
+		};
 	}
 
 	// ------------------------------------------------------------- mobile ---

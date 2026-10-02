@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.3.0
+
+- Desktop: skip the editor redraw Joplin 3.7 makes after every typing pause when a
+  note with an attachment is open in two windows, so the cursor stays put. A redraw
+  that carries a real change still goes through.
+
 ## 1.2.1
 
 - Documentation: mobile support was developed and tested on Android only. iPhone and

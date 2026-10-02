@@ -25,6 +25,11 @@ the next time you open the note.
   type into it saves as clean text with no stray character.
 - It covers bullets, numbered items, checkboxes and nested lists.
 - HTML-format notes are left alone. They already keep empty items.
+- On desktop it also skips a needless redraw. Joplin 3.7 redraws the editor from the saved
+  text after every typing pause when a note with an attachment is open in two windows,
+  which can move the cursor to the bullet above. When the redraw would show exactly what
+  is already on screen, the plugin skips it. Any real change, from sync or another
+  window, still comes through.
 
 ## Install
 
@@ -45,8 +50,8 @@ remove it.
 - Mobile support was built and tested on Android only (Joplin Android 3.7.11). I do not
   have an Apple device, so iPhone and iPad are untested. If you run it there, please
   open an issue with what you see.
-- The plugin makes the redraw harmless for empty list items. It does not stop Joplin
-  from redrawing the editor.
+- Only a redraw that would change nothing is skipped. A redraw carrying a real change
+  (sync, another window, another plugin) still replaces the editor content.
 - On mobile, a blank bullet in a note opened before the plugin finished loading can
   show a narrow leading space while you type. It is removed when the note saves.
 

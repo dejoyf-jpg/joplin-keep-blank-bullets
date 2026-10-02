@@ -2,7 +2,7 @@
 	"manifest_version": 1,
 	"id": "com.dejoyf.keepBlankBullets",
 	"app_min_version": "3.4.2",
-	"version": "1.2.1",
+	"version": "1.3.0",
 	"name": "Keep Blank Bullets",
 	"description": "Rich Text editor, desktop and Android: an empty bullet, numbered item or checkbox stays in the note until you type in it, instead of being dropped when the note saves. Mobile support was developed and tested on Android only (untested on iOS).",
 	"author": "Frank DeJoy",
@@ -25,6 +25,6 @@
 	"screenshots": [],
 	"icons": {},
 	"promo_tile": {},
-	"_publish_hash": "sha256:d7d2d24b24a6b5c1d3d06dddd211254f05a0a19cb046580ef96a3d5d7b1b058e",
-	"_publish_commit": "main:0e68402f693a39a3832d610ea94447be87eac285"
+	"_publish_hash": "sha256:1a019934cc280dbae4430cc83e7cb1e1fe712202766f9b9ebc75b6bbb4df684e",
+	"_publish_commit": "main:860f80b87fa700d09e780d1ea3d4013e02a2fe7a"
 }
